@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-app
+spec:
+  replicas: 1  # Number of desired replicas (pods)
+  selector:
+    matchLabels:
+      app: react-app
+  template:
+    metadata:
+      labels:
+        app: react-app
+    spec:
+      containers:
+        - name: react-container
+          image: abdoubor25/frontend:latest  # Make sure this is the correct image for your React app
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 3000  # Port to expose for serving the React app
+      volumes:
+        - name: react-app-volume
+          emptyDir: {}  # An emptyDir volume can be used to hold static files
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-app-service
+spec:
+  selector:
+    app: react-app
+  ports:
+    - protocol: TCP
+      port: 3000  # The port inside the cluster
+      targetPort: 3000  # The port your React app listens on
+  type: NodePort  # Type of service

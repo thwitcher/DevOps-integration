@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-backend
+spec:
+  selector:
+    matchLabels:
+      app: python-backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: python-backend
+    spec:
+      containers:
+        - name: backend
+          image: abdoubor25/backend:latest 
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: DATABASE_URL
+              value: jdbc:mysql://mysql-service:3306/projetdb?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
+            - name: DATABASE_USERNAME
+              value: ubuntu
+            - name: DATABASE_PASSWORD
+              value: ubuntu
+          ports:
+            - containerPort: 5000  # Port your Python app listens on
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-backend-service
+spec:
+  ports:
+    - protocol: "TCP"
+      port: 5000        # The port exposed externally
+      targetPort: 5000  # The port your Python backend app listens on
+  type: NodePort        # Type of service
+  selector:
+    app: python-backend

@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+
+  # Database Service (Mysql)
+  db:
+      image: mysql:5.7
+      ports:
+        - "33098:3306"
+      restart: always
+      environment:
+        MYSQL_DATABASE: projetdb
+        MYSQL_USER: ubuntu
+        MYSQL_PASSWORD: ubuntu
+        MYSQL_ROOT_PASSWORD: ubuntu
+      volumes:
+        - ./MySQL_Init_Script:/docker-entrypoint-initdb.d
+      networks:
+        - backend
+
+  #backend service
+  backend-server:
+    image: abdoubor25/backend:latest
+    ports: 
+      - "5000:5000"
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PYTHON_ENV: development
+      USERNAME: ubuntu
+      PASSWORD: ubuntu
+    networks:
+      - backend
+      - frontend
+
+   # Frontend Service 
+  front-app:
+    image: abdoubor25/frontend:latest
+    ports:
+      - "3000:3000"
+    restart: always
+    depends_on:
+      - backend-server
+    networks:
+      - frontend
+
+# Networks to be created to facilitate communication between containers
+networks:
+  backend:
+  frontend:
