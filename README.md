@@ -63,7 +63,7 @@ Project Structure :
 ├── deployment1.yml          # Deployment configuration (Kubernetes, etc.)
 └── README.md 
 
-Prerequisites :
+Prerequisites : 
 
 Docker
 Kubernetes (Minikube)
