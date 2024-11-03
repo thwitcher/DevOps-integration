@@ -20,8 +20,11 @@ Project Structure :
 Prerequisites : 
 
 Docker
+
 Kubernetes (Minikube)
+
 Terraform
+
 Jenkins
 
 Setup Instructions : 
